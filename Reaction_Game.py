@@ -2,6 +2,8 @@
 # there should be a timer when the screen turns from red to green
 # when screen turnes green start timer and set 3 random black dots on the screen
 
+
+# new comment 
 #Sources
 #https://pygame.readthedocs.io/en/latest/4_text/text.html
 #https://stackoverflow.com/questions/57623067/how-can-i-get-reaction-time-in-python (reaction time base)
