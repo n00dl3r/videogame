@@ -3,3 +3,4 @@ import pygame
 import random
 import turtle
 import settings
+from random import randint 
