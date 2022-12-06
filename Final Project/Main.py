@@ -1,3 +1,9 @@
+#During my time in seattle i had one of my friends help me create this aim trainer from scratch. 
+#Was pretty hard and had many itterations, this is not the final form
+#So far this spawns a grid, places circles randomly and when clicked they add score and dissapear.
+#planning on adding fps counter, reaction time top left, score top middle, and a difficulty slider. 
+
+
 import turtle
 import random
 import threading
