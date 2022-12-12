@@ -1,5 +1,4 @@
-#During my time in seattle i had one of my friends help me create this aim trainer from scratch. 
-#Was pretty hard and had many itterations, this is not the final form
+
 #So far this spawns a grid, places circles randomly and when clicked they add score and dissapear.
 #planning on adding fps counter, reaction time top left, score top middle, and a difficulty slider. 
 
@@ -7,26 +6,16 @@
 import turtle
 import random
 import threading
-import pygame
 import time
+
+start = time.time()
+
 #starts the turtle library and draws the screen and the dots that you click. 
 wn = turtle.Screen()
 t = turtle.Turtle()
 wn.setup(600,600)
 t.shape("circle")
 t.speed(10)
-
-
-#started loop and created a ticker to create ingame time
-#running = True
-#while running:
-    #real time is the game time so that we can diffrenciate the play time from avg reaction time
-    #realtime = pygame.time.get_ticks()
-    #this closes the window when player closes it or alt+F4
-    #for event in pygame.event.get():
-        #if event.type == pygame.QUIT:
-            #running = False
-            #pygame.quit()
 
 #creates the targets by its x, y plane by its "dummy"'s
 turtle.listen(xdummy=None, ydummy=None)
@@ -36,6 +25,12 @@ def hide(x,y):
     global score
     score = score + 1
     print("Score:", score)
+
+mypen.penup()
+    mypen.hideturtle()
+    mypen.setposition(-290, 310)
+    scorestring ="Score: %s" % score
+    mypen.write(scorestring, False, align='left', font=('Arial', 14, 'normal'))
 
 #when exited from the playing screen it kills the terminal 
 def exit():
@@ -60,8 +55,8 @@ def randturtle():
 #computer chooses between red black and green on a 0, 1, 2 basis. then it spits out the color that it chose in its "print" function
 colors = ["red", "black", "green"]
 def changecolor(x,y):
-    thing = random.randint(0,2)
-    color = colors[thing]
+    rgb = random.randint(0,2)
+    color = colors[rgb]
     print(color)
     t.color(color)
 
@@ -72,10 +67,10 @@ def com():
 
 
 
-
-diff = turtle.textinput("Difficuly", "Hard or easy: ")
-#slower timing than hard
-if diff == "easy":
+#Difficulty Pop Up
+diff = turtle.textinput("Difficuly", "Hard or Easy: ")
+#Inital timing of the game where 
+if diff == "Easy":
     time.sleep(2)
     timer10 = threading.Timer(15, com)
     timer9 = threading.Timer(13.5, com)
@@ -97,11 +92,13 @@ if diff == "easy":
     timer8.start()
     timer9.start()
     timer10.start()
-    print("start")
+    print("Start")
     randturtle()
     t.onclick(hide, btn=1, add=None)
     timer.cancel()
-elif diff == "hard":
+
+#Hard mode with faster timers than Easy Mode
+elif diff == "Hard":
     time.sleep(2)
     timer10 = threading.Timer(10, com)
     timer9 = threading.Timer(9, com)
@@ -123,21 +120,20 @@ elif diff == "hard":
     timer8.start()
     timer9.start()
     timer10.start()
-    print("start")
+    print("Start")
     randturtle()
     t.onclick(hide, btn=1, add=None)
     timer.cancel()
 
+timer_text = turtle.Turtle()
+
+
 #once closed print final clicks on black dots in terminal
-forwrite = str("Final score: " + str(score))
-print(forwrite)
-#t.write()
+finalScore = str("Final score: " + str(score))
+print(finalScore)
 
-
-
-#make it end
+#make it end with the e key
 turtle.onkeypress(exit, "e")
-#keeping it going
 wn.mainloop()
 turtle.mainloop()
 input()
