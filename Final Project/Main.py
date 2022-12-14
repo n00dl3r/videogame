@@ -17,6 +17,26 @@ wn.setup(600,600)
 t.shape("circle")
 t.speed(10)
 
+
+#This displays a timer in the center of the screen as of now, will move to one of the corners
+window = turtle.Screen()
+window.tracer(0)
+
+timer_text = turtle.Turtle()
+
+start = time.time()
+while time.time() - start < 5:
+    timer_text.clear()
+    timer_text.write(int(time.time() - start), font=("Courier", 30))
+
+    window.update()
+
+#Add the time between clicks timer here
+
+#Add a saveable leaderboard here
+
+
+
 #creates the targets by its x, y plane by its "dummy"'s
 turtle.listen(xdummy=None, ydummy=None)
 score  = 0
