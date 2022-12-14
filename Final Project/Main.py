@@ -92,7 +92,11 @@ while running:
     if avg_reaction:
         screen.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
 
+# im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
+    pygame.display.flip()
 
+
+    
 # #Difficulty Pop Up
 # #diff = pygame.display.set_caption("Difficulty")
 # #Inital timing of the game where 
@@ -148,7 +152,4 @@ while running:
 #     timer10.start()
 #     print("Start")
 
-# im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
-    pygame.display.flip()
 
-# i tried to make a backround be an image of a monkey but i toataly forgot how to import my file as a path. 
