@@ -26,12 +26,6 @@ def hide(x,y):
     score = score + 1
     print("Score:", score)
 
-mypen.penup()
-    mypen.hideturtle()
-    mypen.setposition(-290, 310)
-    scorestring ="Score: %s" % score
-    mypen.write(scorestring, False, align='left', font=('Arial', 14, 'normal'))
-
 #when exited from the playing screen it kills the terminal 
 def exit():
     turtle.bye()
