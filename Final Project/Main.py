@@ -1,153 +1,152 @@
+# i want to make a game that tracks reacion time by having the backround turn either red or green and making player click 3 dots randomly while timed
+# there should be a timer when the screen turns from red to green
+# when screen turnes green start timer and set 3 random black dots on the screen
 
-#So far this spawns a grid, places circles randomly and when clicked they add score and dissapear.
-#planning on adding fps counter, reaction time top left, score top middle, and a difficulty slider. 
 
+# new comment 
+#Sources
+#https://pygame.readthedocs.io/en/latest/4_text/text.html
+#https://stackoverflow.com/questions/57623067/how-can-i-get-reaction-time-in-python (reaction time base)
+#https://www.geeksforgeeks.org/python-display-text-to-pygame-window/ (printing on screen)
+#https://www.digitalocean.com/community/tutorials/average-of-list-in-python (finding avg of reaction)
+#https://bcp.instructure.com/courses/10268 and https://bcpsj-my.sharepoint.com/personal/ccozort_bcp_org/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fccozort%5Fbcp%5Forg%2FDocuments%2FDocuments%2F02%5FCourses%2FCS%2FIntro%20to%20Programming%2F2022%5FFall%2FCode&ga=1 for class notes
+#https://pygame.readthedocs.io/en/latest/1_intro/intro.html
 
-import turtle
+import pygame
 import random
-import threading
-import time
+import time 
 
-start = time.time()
+pygame.init()
 
-#starts the turtle library and draws the screen and the dots that you click. 
-wn = turtle.Screen()
-t = turtle.Turtle()
-wn.setup(600,600)
-t.shape("circle")
-t.speed(10)
+#sets the game into a screen popup and displays the name of the game
+screen = pygame.display.set_mode((640, 480))
+pygame.display.set_caption("Reaction Time game")
 
+#found a font that is pleasing to the eye
+font = pygame.font.SysFont('arial', 30)
 
-#This displays a timer in the center of the screen as of now, will move to one of the corners
-window = turtle.Screen()
-window.tracer(0)
+#displays a way to start the game in the center of the screen
+text = font.render("PRESS ANY KEY TO START ", 0, (255,255,255))
+# font = font.render("PRESS ANY KEY",0,(0,255,0))
 
-timer_text = turtle.Turtle()
+#Universal claims
+reaction = None
+avg_reaction = None
+highscore = None
 
-start = time.time()
-while time.time() - start < 5:
-    timer_text.clear()
-    timer_text.write(int(time.time() - start), font=("Courier", 30))
+#preemptively starting the loop and giving vairables 
+game_state = "start"
+game_time = 0
+averagereacttime = 0
+count = 0
 
-    window.update()
+#started loop and created a ticker to create ingame time
+running = True
+while running:
+    #real time is the game time so that we can diffrenciate the play time from avg reaction time
+    realtime = pygame.time.get_ticks()
+    #this closes the window when player closes it or alt+F4
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.quit()
+    #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
+    # from the source of digital ocean
+        if event.type == pygame.KEYDOWN:
+            if game_state == "start":
+                game_state = "wait" 
+                game_time = realtime + random.randint(1000, 4000)
+    #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
+    # from source of class notes and comments  
+            if game_state == "wait_for_reaction": 
+                game_state = "wait" 
+                reaction_time = (realtime - game_time) / 1000
+                game_time = realtime + random.randint(1000, 4000)
+                count += 1
+    # this is where the magic happens with the display and posting results
+    # from source of digital ocean
+                averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
+                reaction = font.render(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+                avg_reaction = font.render(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+# telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
+    if game_state == "wait":
+        if realtime >= game_time:
+            game_state = "wait_for_reaction"        
 
-#Add the time between clicks timer here
-
-#Add a saveable leaderboard here
-
-
-
-#creates the targets by its x, y plane by its "dummy"'s
-turtle.listen(xdummy=None, ydummy=None)
-score  = 0
-def hide(x,y):
-    t.hideturtle()
-    global score
-    score = score + 1
-    print("Score:", score)
-
-#when exited from the playing screen it kills the terminal 
-def exit():
-    turtle.bye()
-    #timer.cancel()
-
-#the code that randomly sends the target in the playing feild, it also has it also selects a random point of the playing feild between -290, 290 pixels.
-def randturtle():
-    t.color("black")
-    t.penup()
-    r = round(random.uniform(.5,2.25))
-    t.shapesize(r)
-    xc = random.randint(-290,290)
-    yc = random.randint(-290,290)
-    #print(xc,yc,r)
-    t.hideturtle()
-    t.goto(xc,yc)
-    t.showturtle()
-
+# refreshes the page basicaly and make teh entire window black again
+    screen.fill(pygame.Color("Black"))
     
-
-#computer chooses between red black and green on a 0, 1, 2 basis. then it spits out the color that it chose in its "print" function
-colors = ["red", "black", "green"]
-def changecolor(x,y):
-    rgb = random.randint(0,2)
-    color = colors[rgb]
-    print(color)
-    t.color(color)
-
-#this function deals with the hit registration
-def com():
-    randturtle()
-    t.onclick(hide, btn=1, add=None)
-
-
-
-#Difficulty Pop Up
-diff = turtle.textinput("Difficuly", "Hard or Easy: ")
-#Inital timing of the game where 
-if diff == "Easy":
-    time.sleep(2)
-    timer10 = threading.Timer(15, com)
-    timer9 = threading.Timer(13.5, com)
-    timer8 = threading.Timer(12, com)
-    timer7 = threading.Timer(10.5, com)
-    timer6 = threading.Timer(9, com)
-    timer5 = threading.Timer(7.5, com)
-    timer4 = threading.Timer(6, com)
-    timer3 = threading.Timer(4.5, com)
-    timer2 = threading.Timer(3, com)
-    timer = threading.Timer(1.5, com)
-    timer.start()
-    timer2.start()
-    timer3.start()
-    timer4.start()
-    timer5.start()
-    timer6.start()
-    timer7.start()
-    timer8.start()
-    timer9.start()
-    timer10.start()
-    print("Start")
-    randturtle()
-    t.onclick(hide, btn=1, add=None)
-    timer.cancel()
-
-#Hard mode with faster timers than Easy Mode
-elif diff == "Hard":
-    time.sleep(2)
-    timer10 = threading.Timer(10, com)
-    timer9 = threading.Timer(9, com)
-    timer8 = threading.Timer(8, com)
-    timer7 = threading.Timer(7, com)
-    timer6 = threading.Timer(6, com)
-    timer5 = threading.Timer(5, com)
-    timer4 = threading.Timer(4, com)
-    timer3 = threading.Timer(3, com)
-    timer2 = threading.Timer(2, com)
-    timer = threading.Timer(1, com)
-    timer.start()
-    timer2.start()
-    timer3.start()
-    timer4.start()
-    timer5.start()
-    timer6.start()
-    timer7.start()
-    timer8.start()
-    timer9.start()
-    timer10.start()
-    print("Start")
-    randturtle()
-    t.onclick(hide, btn=1, add=None)
-    timer.cancel()
-
-timer_text = turtle.Turtle()
+    #gets the center of the screen to "start":
+    center = screen.get_rect().center
+    if game_state == "start":
+        screen.blit(text, text.get_rect(center = center))
+    # waits for the next input of player
+    if game_state == "wait_for_reaction":
+        screen.blit(text, text.get_rect(center = center))
+    # reaction of most previous attempt "score"
+    if reaction:
+        screen.blit(reaction, reaction.get_rect(center = (center[0], 350)))
+    # average reaction of all attempts 
+    if avg_reaction:
+        screen.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
 
 
-#once closed print final clicks on black dots in terminal
-finalScore = str("Final score: " + str(score))
-print(finalScore)
+# #Difficulty Pop Up
+# #diff = pygame.display.set_caption("Difficulty")
+# #Inital timing of the game where 
+# #if diff == "Easy":
+#     #time.sleep(2)
+#     #timer10 = threading.Timer(15, com)
+#     #timer9 = threading.Timer(13.5, com)
+#     #timer8 = threading.Timer(12, com)
+#     #timer7 = threading.Timer(10.5, com)
+#     #timer6 = threading.Timer(9, com)
+#     #timer5 = threading.Timer(7.5, com)
+#     #timer4 = threading.Timer(6, com)
+#     #timer3 = threading.Timer(4.5, com)
+#     #timer2 = threading.Timer(3, com)
+#     #timer = threading.Timer(1.5, com)
+#     #timer.start()
+#     timer2.start()
+#     timer3.start()
+#     timer4.start()
+#     timer5.start()
+#     timer6.start()
+#     timer7.start()
+#     timer8.start()
+#     timer9.start()
+#     timer10.start()
+#     print("Start")
+#     randturtle()
+#     t.onclick(hide, btn=1, add=None)
+#     timer.cancel()
 
-#make it end with the e key
-turtle.onkeypress(exit, "e")
-wn.mainloop()
-turtle.mainloop()
-input()
+# #Hard mode with faster timers than Easy Mode
+# elif diff == "Hard":
+#     time.sleep(2)
+#     timer10 = threading.Timer(10, com)
+#     timer9 = threading.Timer(9, com)
+#     timer8 = threading.Timer(8, com)
+#     timer7 = threading.Timer(7, com)
+#     timer6 = threading.Timer(6, com)
+#     timer5 = threading.Timer(5, com)
+#     timer4 = threading.Timer(4, com)
+#     timer3 = threading.Timer(3, com)
+#     timer2 = threading.Timer(2, com)
+#     timer = threading.Timer(1, com)
+#     timer.start()
+#     timer2.start()
+#     timer3.start()
+#     timer4.start()
+#     timer5.start()
+#     timer6.start()
+#     timer7.start()
+#     timer8.start()
+#     timer9.start()
+#     timer10.start()
+#     print("Start")
+
+# im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
+    pygame.display.flip()
+
+# i tried to make a backround be an image of a monkey but i toataly forgot how to import my file as a path. 

@@ -14,6 +14,8 @@
 
 import pygame
 import random
+import time 
+
 pygame.init()
 
 #sets the game into a screen popup and displays the name of the game
@@ -87,6 +89,62 @@ while running:
     # average reaction of all attempts 
     if avg_reaction:
         screen.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
+
+
+# #Difficulty Pop Up
+# #diff = pygame.display.set_caption("Difficulty")
+# #Inital timing of the game where 
+# #if diff == "Easy":
+#     #time.sleep(2)
+#     #timer10 = threading.Timer(15, com)
+#     #timer9 = threading.Timer(13.5, com)
+#     #timer8 = threading.Timer(12, com)
+#     #timer7 = threading.Timer(10.5, com)
+#     #timer6 = threading.Timer(9, com)
+#     #timer5 = threading.Timer(7.5, com)
+#     #timer4 = threading.Timer(6, com)
+#     #timer3 = threading.Timer(4.5, com)
+#     #timer2 = threading.Timer(3, com)
+#     #timer = threading.Timer(1.5, com)
+#     #timer.start()
+#     timer2.start()
+#     timer3.start()
+#     timer4.start()
+#     timer5.start()
+#     timer6.start()
+#     timer7.start()
+#     timer8.start()
+#     timer9.start()
+#     timer10.start()
+#     print("Start")
+#     randturtle()
+#     t.onclick(hide, btn=1, add=None)
+#     timer.cancel()
+
+# #Hard mode with faster timers than Easy Mode
+# elif diff == "Hard":
+#     time.sleep(2)
+#     timer10 = threading.Timer(10, com)
+#     timer9 = threading.Timer(9, com)
+#     timer8 = threading.Timer(8, com)
+#     timer7 = threading.Timer(7, com)
+#     timer6 = threading.Timer(6, com)
+#     timer5 = threading.Timer(5, com)
+#     timer4 = threading.Timer(4, com)
+#     timer3 = threading.Timer(3, com)
+#     timer2 = threading.Timer(2, com)
+#     timer = threading.Timer(1, com)
+#     timer.start()
+#     timer2.start()
+#     timer3.start()
+#     timer4.start()
+#     timer5.start()
+#     timer6.start()
+#     timer7.start()
+#     timer8.start()
+#     timer9.start()
+#     timer10.start()
+#     print("Start")
 
 # im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
     pygame.display.flip()
