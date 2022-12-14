@@ -8,6 +8,8 @@
 
 #To make this a final project quality work, i need to add a saveable leader board and a end after a certian amount of tries. also add a replay button. 
 
+
+##########################BACKROUND#############################
 import pygame
 import random
 import time 
@@ -21,7 +23,7 @@ fps = 70
 
 
 #found a font that is pleasing to the eye
-font = pygame.font.SysFont('arial', 30)
+font = pygame.font.SysFont('dejavuserif', 30)
 
 #displays a way to start the game in the center of the screen
 text = font.render("PRESS ANY KEY TO START ", 0, (255,255,255))
@@ -38,6 +40,10 @@ game_time = 0
 averagereacttime = 0
 count = 0
 
+
+
+
+###############################GAMERULES/GAMELOGIC#############################
 #started loop and created a ticker to create ingame time
 running = True
 while running:
@@ -71,6 +77,9 @@ while running:
         if realtime >= game_time:
             game_state = "wait_for_reaction"        
 
+
+
+############################ACTUAL DISPLAY OF GAME########################################
 # refreshes the page basicaly and make teh entire window black again
     screen.fill(pygame.Color("Black"))
     
@@ -91,57 +100,13 @@ while running:
 # im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
     pygame.display.flip()
 
-# #Difficulty Pop Up
-# #diff = pygame.display.set_caption("Difficulty")
-# #Inital timing of the game where 
-# #if diff == "Easy":
-#     #time.sleep(2)
-#     #timer10 = threading.Timer(15, com)
-#     #timer9 = threading.Timer(13.5, com)
-#     #timer8 = threading.Timer(12, com)
-#     #timer7 = threading.Timer(10.5, com)
-#     #timer6 = threading.Timer(9, com)
-#     #timer5 = threading.Timer(7.5, com)
-#     #timer4 = threading.Timer(6, com)
-#     #timer3 = threading.Timer(4.5, com)
-#     #timer2 = threading.Timer(3, com)
-#     #timer = threading.Timer(1.5, com)
-#     #timer.start()
-#     timer2.start()
-#     timer3.start()
-#     timer4.start()
-#     timer5.start()
-#     timer6.start()
-#     timer7.start()
-#     timer8.start()
-#     timer9.start()
-#     timer10.start()
-#     print("Start")
-#     randturtle()
-#     t.onclick(hide, btn=1, add=None)
-#     timer.cancel()
 
-# #Hard mode with faster timers than Easy Mode
-# elif diff == "Hard":
-#     time.sleep(2)
-#     timer10 = threading.Timer(10, com)
-#     timer9 = threading.Timer(9, com)
-#     timer8 = threading.Timer(8, com)
-#     timer7 = threading.Timer(7, com)
-#     timer6 = threading.Timer(6, com)
-#     timer5 = threading.Timer(5, com)
-#     timer4 = threading.Timer(4, com)
-#     timer3 = threading.Timer(3, com)
-#     timer2 = threading.Timer(2, com)
-#     timer = threading.Timer(1, com)
-#     timer.start()
-#     timer2.start()
-#     timer3.start()
-#     timer4.start()
-#     timer5.start()
-#     timer6.start()
-#     timer7.start()
-#     timer8.start()
-#     timer9.start()
-#     timer10.start()
-#     print("Start")
+#############################DIFFICULTY SETTINGS THAT DONT WORK#####################################
+
+#working leader board
+
+
+#Class that makes the user put in a username to display on leaderboard
+
+
+#Userfriendly start up/home screen
