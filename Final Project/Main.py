@@ -12,6 +12,8 @@
 #https://bcp.instructure.com/courses/10268 and https://bcpsj-my.sharepoint.com/personal/ccozort_bcp_org/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fccozort%5Fbcp%5Forg%2FDocuments%2FDocuments%2F02%5FCourses%2FCS%2FIntro%20to%20Programming%2F2022%5FFall%2FCode&ga=1 for class notes
 #https://pygame.readthedocs.io/en/latest/1_intro/intro.html
 
+#To make this a final project quality work, i need to add a saveable leader board and a end after a certian amount of tries. also add a replay button. 
+
 import pygame
 import random
 import time 
