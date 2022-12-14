@@ -1,14 +1,16 @@
-# Roblox ESP
-you will need to have a roblox account
-computer
-mouse
-a brain
+# Reaction Time Game
+You will need
+keyboard
+eyes
+brain
+fingers
+clam space
 
 # What does it do?
-i allows you to see your enimies through walls and get an advantage in any game
+strengthens your reactiontime for any real/virtual world sense 
 
 # How to install the software
 download the zip, unzip the file then find the main code and run the software
 
 # Agreement Fourm
-By downloading this file you understand that your roblox account may be banned and you will loose your account but will get good at the shooter games on the platform
+By downloading this file you understand that you will become extremely fast at reacting to a text on a screen. 

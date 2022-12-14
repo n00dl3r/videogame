@@ -1,9 +1,3 @@
-# i want to make a game that tracks reacion time by having the backround turn either red or green and making player click 3 dots randomly while timed
-# there should be a timer when the screen turns from red to green
-# when screen turnes green start timer and set 3 random black dots on the screen
-
-
-# new comment 
 #Sources
 #https://pygame.readthedocs.io/en/latest/4_text/text.html
 #https://stackoverflow.com/questions/57623067/how-can-i-get-reaction-time-in-python (reaction time base)
@@ -23,6 +17,8 @@ pygame.init()
 #sets the game into a screen popup and displays the name of the game
 screen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption("Reaction Time game")
+fps = 70
+
 
 #found a font that is pleasing to the eye
 font = pygame.font.SysFont('arial', 30)
@@ -95,8 +91,6 @@ while running:
 # im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
     pygame.display.flip()
 
-
-    
 # #Difficulty Pop Up
 # #diff = pygame.display.set_caption("Difficulty")
 # #Inital timing of the game where 
@@ -151,5 +145,3 @@ while running:
 #     timer9.start()
 #     timer10.start()
 #     print("Start")
-
-
