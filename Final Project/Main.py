@@ -16,7 +16,6 @@ from settings import *
 from os import path
 
 #universal variables
-count = 0
 running = True
 
 #Game class 
@@ -33,6 +32,7 @@ class Game:
         self.running = running = True
         self.font_name = pg.font.match_font(FONT_NAME)
         self.load_data()
+        self.reaction_time
         
         #Creates all the text used in the file
     def draw_text(self, text, size, color, x, y):
@@ -56,6 +56,8 @@ class Game:
         # Game Loop
         #real time is the game time so that we can diffrenciate the play time from avg reaction time
         realtime = pg.time.get_ticks()
+        count = 0 
+        reaction_time = (realtime - game_time) / 1000
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
@@ -80,7 +82,6 @@ class Game:
         # from source of class notes and comments  
         if game_state == "wait_for_reaction": 
                 game_state = "wait" 
-                reaction_time = (realtime - game_time) / 1000
                 game_time = realtime + random.randint(1000, 4000)
                 count += 1
         if game_state == "wait":
@@ -89,23 +90,23 @@ class Game:
         # this is where the magic happens with the display and posting results
         # from source of digital ocean
                 averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
-    # reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-    # avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+    reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+    avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
         # telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
          
- 
 
     def show_start_screen(self):
         # game splash/start screen
+        realtime = pg.time.get_ticks()
+        game_time = realtime + random.randint(1000, 4000)
+        reaction_time = (realtime - game_time) / 1000
         reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-        avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+        avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {avg_reaction:.03f}",0,(255,255,255))
         self.screen.fill(BGCOLOR)
         self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
         self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
         self.draw_text("Your Average Reaction: " + str(avg_reaction), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
-        self.wait_for_key()
-
 
     # def score(self):
 
@@ -114,16 +115,18 @@ class Game:
         if not self.running:
             return
         self.screen.fill(BLACK)
+        #screen display
         self.draw_text("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
+        self.draw_text("time: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
         self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
         if self.score > self.highscore:
             self.highscore = self.score
-            self.draw_text("FASTEST SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+            self.draw_text("FASTEST TIME!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
             with open(path.join(self.dir, HS_FILE), 'w') as f:
                 f.write(str(self.score))
+        #actualy calculates the fastest time
         else:
-            self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+            self.draw_text("Fastest time: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
         pg.display.flip()
-        
+
 pg.quit()
