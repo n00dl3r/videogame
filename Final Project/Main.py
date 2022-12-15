@@ -39,7 +39,6 @@ class Game:
             text_rect.midtop = (x, y)
             self.screen.blit(text_surface, text_rect)
 
-    
     #Fetches high score data 
     def load_data(self):
         # load high score
@@ -91,8 +90,6 @@ class Game:
             if realtime >= game_time:
                 game_state = "wait_for_reaction"    
           
-
-
     def show_start_screen(self):
         # game splash/start screen
         self.screen.fill(BGCOLOR)
