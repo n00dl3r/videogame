@@ -1,62 +1,77 @@
-#Sources
-#https://pygame.readthedocs.io/en/latest/4_text/text.html
-#https://stackoverflow.com/questions/57623067/how-can-i-get-reaction-time-in-python (reaction time base)
-#https://www.geeksforgeeks.org/python-display-text-to-pygame-window/ (printing on screen)
-#https://www.digitalocean.com/community/tutorials/average-of-list-in-python (finding avg of reaction)
-#https://bcp.instructure.com/courses/10268 and https://bcpsj-my.sharepoint.com/personal/ccozort_bcp_org/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fccozort%5Fbcp%5Forg%2FDocuments%2FDocuments%2F02%5FCourses%2FCS%2FIntro%20to%20Programming%2F2022%5FFall%2FCode&ga=1 for class notes
-#https://pygame.readthedocs.io/en/latest/1_intro/intro.html
-
-#To make this a final project quality work, i need to add a saveable leader board and a end after a certian amount of tries. also add a replay button. 
+# #Sources
+# #https://pygame.readthedocs.io/en/latest/4_text/text.html
+# #https://stackoverflow.com/questions/57623067/how-can-i-get-reaction-time-in-python (reaction time base)
+# #https://www.geeksforgeeks.org/python-display-text-to-pygame-window/ (printing on screen)
+# #https://www.digitalocean.com/community/tutorials/average-of-list-in-python (finding avg of reaction)
+# #https://bcp.instructure.com/courses/10268 and https://bcpsj-my.sharepoint.com/personal/ccozort_bcp_org/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fccozort%5Fbcp%5Forg%2FDocuments%2FDocuments%2F02%5FCourses%2FCS%2FIntro%20to%20Programming%2F2022%5FFall%2FCode&ga=1 for class notes
+# #https://pygame.readthedocs.io/en/latest/1_intro/intro.html
 
 
-##########################BACKROUND#############################
-import pygame
+#Import Librarys 
+import pygame as pg
 import random
-import time 
+from settings import *
+from os import path
 
-pygame.init()
-
-#sets the game into a screen popup and displays the name of the game
-screen = pygame.display.set_mode((640, 480))
-pygame.display.set_caption("Reaction Time game")
-fps = 70
-
-
-#found a font that is pleasing to the eye
-font = pygame.font.SysFont('dejavuserif', 30)
-
-#displays a way to start the game in the center of the screen
-text = font.render("PRESS ANY KEY TO START ", 0, (255,255,255))
-# font = font.render("PRESS ANY KEY",0,(0,255,0))
-
-#Universal claims
-reaction = None
-avg_reaction = None
-highscore = None
-
-#preemptively starting the loop and giving vairables 
-game_state = "start"
-game_time = 0
-averagereacttime = 0
+#universal variables
 count = 0
-
-
-
-
-###############################GAMERULES/GAMELOGIC#############################
-#started loop and created a ticker to create ingame time
 running = True
+
+#Game class 
+class Game:
+    def __init__(self):
+        # initialize game window, etc
+        pg.init()
+        pg.mixer.init()
+        #Takes settings and imports them to the code witch then 
+        self.screen = pg.display.set_mode((WIDTH, HEIGHT))
+        pg.display.set_caption(TITLE)
+        #Sets core of game by initalizing the clock
+        self.clock = pg.time.Clock()
+        self.running = True
+        self.font_name = pg.font.match_font(FONT_NAME)
+        self.load_data()
+    
+    #Fetches high score data 
+    def load_data(self):
+        # load high score
+        self.dir = path.dirname(__file__)
+        with open(path.join(self.dir, HS_FILE), 'r') as f:
+            try:
+                self.highscore = int(f.read())
+            except:
+                self.highscore = 0
+
+    def run(self):
+        # Game Loop
+        self.playing = True
+        while self.playing:
+            self.clock.tick(FPS)
+            self.events()
+            self.update()
+            self.draw()
+
+    def show_start_screen(self):
+        # game splash/start screen
+        self.screen.fill(BGCOLOR)
+        self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+        self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, 15)
+        pg.display.flip()
+        self.wait_for_key()
+
 while running:
     #real time is the game time so that we can diffrenciate the play time from avg reaction time
-    realtime = pygame.time.get_ticks()
+    realtime = pg.time.get_ticks()
     #this closes the window when player closes it or alt+F4
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
+    for event in pg.event.get():
+        pg.init()
+        if event.type == pg.QUIT:
             running = False
-            pygame.quit()
+            pg.quit()
     #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
     # from the source of digital ocean
-        if event.type == pygame.KEYDOWN:
+    if event.type == pg.KEYDOWN:
             if game_state == "start":
                 game_state = "wait" 
                 game_time = realtime + random.randint(1000, 4000)
@@ -70,43 +85,42 @@ while running:
     # this is where the magic happens with the display and posting results
     # from source of digital ocean
                 averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
-                reaction = font.render(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-                avg_reaction = font.render(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+                reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+                avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
 # telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
     if game_state == "wait":
         if realtime >= game_time:
-            game_state = "wait_for_reaction"        
+            game_state = "wait_for_reaction"    
+          
+    def show_go_screen(self):
+        # game over/continue
+        if not self.running:
+            return
+        self.screen.fill(BLACK)
+        self.draw_text("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+        self.draw_text("Score: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
+        self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+        if self.score > self.highscore:
+            self.highscore = self.score
+            self.draw_text("NEW HIGH SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+            with open(path.join(self.dir, HS_FILE), 'w') as f:
+                f.write(str(self.score))
+        else:
+            self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+        pg.display.flip()
+        self.wait_for_key()
+
+    def draw_text(self, text, size, color, x, y):
+        font = pg.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
 
-
-############################ACTUAL DISPLAY OF GAME########################################
-# refreshes the page basicaly and make teh entire window black again
-    screen.fill(pygame.Color("Black"))
-    
-    #gets the center of the screen to "start":
-    center = screen.get_rect().center
-    if game_state == "start":
-        screen.blit(text, text.get_rect(center = center))
-    # waits for the next input of player
-    if game_state == "wait_for_reaction":
-        screen.blit(text, text.get_rect(center = center))
-    # reaction of most previous attempt "score"
-    if reaction:
-        screen.blit(reaction, reaction.get_rect(center = (center[0], 350)))
-    # average reaction of all attempts 
-    if avg_reaction:
-        screen.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
-
-# im using flip instead of update because im not having any bots or sprites on my screen and flip just updates the entire screen where as updateing an individual sprite updates per entity
-    pygame.display.flip()
-
-
-#############################DIFFICULTY SETTINGS THAT DONT WORK#####################################
-
-#working leader board
-
-
-#Class that makes the user put in a username to display on leaderboard
-
-
-#Userfriendly start up/home screen
+  #this closes the window when player closes it or alt+F4
+    for event in pg.event.get():
+        pg.init()
+        if event.type == pg.QUIT:
+            running = False
+pg.quit()
