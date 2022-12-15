@@ -125,11 +125,5 @@ class Game:
         else:
             self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
         pg.display.flip()
-        self.wait_for_key()
-
-#   #this closes the window when player closes it or alt+F4
-#     for event in pg.event.get():
-#         pg.init()
-#         if event.type == pg.QUIT:
-#             running = False
+        
 pg.quit()
