@@ -28,9 +28,17 @@ class Game:
         pg.display.set_caption(TITLE)
         #Sets core of game by initalizing the clock
         self.clock = pg.time.Clock()
-        self.running = True
+        self.running = running = True
         self.font_name = pg.font.match_font(FONT_NAME)
         self.load_data()
+
+        def draw_text(self, text, size, color, x, y):
+            font = pg.font.Font(self.font_name, size)
+            text_surface = font.render(text, True, color)
+            text_rect = text_surface.get_rect()
+            text_rect.midtop = (x, y)
+            self.screen.blit(text_surface, text_rect)
+
     
     #Fetches high score data 
     def load_data(self):
@@ -44,12 +52,46 @@ class Game:
 
     def run(self):
         # Game Loop
+        #real time is the game time so that we can diffrenciate the play time from avg reaction time
+        realtime = pg.time.get_ticks()
         self.playing = True
         while self.playing:
             self.clock.tick(FPS)
             self.events()
             self.update()
             self.draw()
+            while running:
+            #this closes the window when player closes it or alt+F4
+                for event in pg.event.get():
+                    pg.init()
+        if event.type == pg.QUIT:
+            running = False
+            pg.quit()
+
+        #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
+        # from the source of digital ocean
+        if event.type == pg.KEYDOWN:
+         if game_state == "start":
+                game_state = "wait" 
+                game_time = realtime + random.randint(1000, 4000)
+        #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
+        # from source of class notes and comments  
+        if game_state == "wait_for_reaction": 
+                game_state = "wait" 
+                reaction_time = (realtime - game_time) / 1000
+                game_time = realtime + random.randint(1000, 4000)
+                count += 1
+        # this is where the magic happens with the display and posting results
+        # from source of digital ocean
+                averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
+                reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+                avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+        # telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
+        if game_state == "wait":
+            if realtime >= game_time:
+                game_state = "wait_for_reaction"    
+          
+
 
     def show_start_screen(self):
         # game splash/start screen
@@ -60,38 +102,6 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
 
-while running:
-    #real time is the game time so that we can diffrenciate the play time from avg reaction time
-    realtime = pg.time.get_ticks()
-    #this closes the window when player closes it or alt+F4
-    for event in pg.event.get():
-        pg.init()
-        if event.type == pg.QUIT:
-            running = False
-            pg.quit()
-    #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
-    # from the source of digital ocean
-    if event.type == pg.KEYDOWN:
-            if game_state == "start":
-                game_state = "wait" 
-                game_time = realtime + random.randint(1000, 4000)
-    #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
-    # from source of class notes and comments  
-            if game_state == "wait_for_reaction": 
-                game_state = "wait" 
-                reaction_time = (realtime - game_time) / 1000
-                game_time = realtime + random.randint(1000, 4000)
-                count += 1
-    # this is where the magic happens with the display and posting results
-    # from source of digital ocean
-                averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
-                reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-                avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
-# telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
-    if game_state == "wait":
-        if realtime >= game_time:
-            game_state = "wait_for_reaction"    
-          
     def show_go_screen(self):
         # game over/continue
         if not self.running:
@@ -102,21 +112,13 @@ while running:
         self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
         if self.score > self.highscore:
             self.highscore = self.score
-            self.draw_text("NEW HIGH SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+            self.draw_text("FASTEST SCORE!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
             with open(path.join(self.dir, HS_FILE), 'w') as f:
                 f.write(str(self.score))
         else:
             self.draw_text("High Score: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
         pg.display.flip()
         self.wait_for_key()
-
-    def draw_text(self, text, size, color, x, y):
-        font = pg.font.Font(self.font_name, size)
-        text_surface = font.render(text, True, color)
-        text_rect = text_surface.get_rect()
-        text_rect.midtop = (x, y)
-        self.screen.blit(text_surface, text_rect)
-
 
   #this closes the window when player closes it or alt+F4
     for event in pg.event.get():
