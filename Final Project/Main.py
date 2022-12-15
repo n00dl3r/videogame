@@ -23,7 +23,7 @@ class Game:
         # initialize game window, etc
         pg.init()
         pg.mixer.init()
-        #Takes settings and imports them to the code witch then 
+        #Takes settings and imports them to the code with then 
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         #Sets core of game by initalizing the clock
