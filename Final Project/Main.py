@@ -10,7 +10,7 @@
 #this is a passion of mine because i realized that my teammates at swim practice had slow reaction times in general and this will help them by improving thier brains reactiontime and then it will translate to the pool when nessecary.
 
 #Import Librarys 
-from asyncio import _enter_task
+#from asyncio import _enter_task
 import pygame as pg
 import random
 from settings import *
