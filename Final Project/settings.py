@@ -1,3 +1,7 @@
+import pygame as pg
+
+
+
 # game options/settings
 TITLE = "Reaction Time Game"
 WIDTH = 480
@@ -6,7 +10,9 @@ FPS = 60
 FONT_NAME = 'dejavuserif'
 HS_FILE = "fastestreaction.txt"
 SCREEN = pg.display.set_mode((640, 480))
-TEXT = FONT_NAME.render("PRESS ANY KEY TO START ", 0, (255,255,255))
+TEXT = FONT_NAME 
+
+
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
