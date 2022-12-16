@@ -16,7 +16,15 @@ from settings import *
 from os import path
 
 #universal variables
-running = True
+reaction = None
+avg_reaction = None
+highscore = None
+
+#preemptively starting the loop and giving vairables 
+game_state = "start"
+game_time = 0
+averagereacttime = 0
+count = 0
 
 #Game class 
 class Game:
@@ -55,44 +63,56 @@ class Game:
     def run(self):
         # Game Loop
         #real time is the game time so that we can diffrenciate the play time from avg reaction time
-        realtime = pg.time.get_ticks()
-        count = 0 
-        reaction_time = (realtime - game_time) / 1000
-        self.playing = True
-        while self.playing:
-            self.clock.tick(FPS)
-            self.events()
-            self.update()
-            self.draw()
-            while running:
+        #started loop and created a ticker to create ingame time
+        running = True
+        while running:
+        #real time is the game time so that we can diffrenciate the play time from avg reaction time
+            realtime = pg.time.get_ticks()
             #this closes the window when player closes it or alt+F4
-                for event in pg.event.get():
-                    pg.init()
-        if event.type == pg.QUIT:
-            running = False
+            for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        running = False
             pg.quit()
-
-        #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
-        # from the source of digital ocean
+    #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
+    # from the source of digital ocean
         if event.type == pg.KEYDOWN:
-         if game_state == "start":
+            if game_state == "start":
                 game_state = "wait" 
                 game_time = realtime + random.randint(1000, 4000)
-        #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
-        # from source of class notes and comments  
-        if game_state == "wait_for_reaction": 
+    #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
+    # from source of class notes and comments  
+            if game_state == "wait_for_reaction": 
                 game_state = "wait" 
+                reaction_time = (realtime - game_time) / 1000
                 game_time = realtime + random.randint(1000, 4000)
                 count += 1
-        if game_state == "wait":
-            if realtime >= game_time:
-                game_state = "wait_for_reaction"   
-        # this is where the magic happens with the display and posting results
-        # from source of digital ocean
+    # this is where the magic happens with the display and posting results
+    # from source of digital ocean
                 averagereacttime = (averagereacttime * (count-1) + reaction_time) / count
-    reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-    avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
-        # telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
+                reaction = FONT_NAME.render(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+                avg_reaction = FONT_NAME.render(f"AVERAGE REACTION TIME IS: {averagereacttime:.03f}",0,(255,255,255))
+# telling the computer to wait if the real time is greater than the game time then if it is, it waits for player response
+                if game_state == "wait":
+                        if realtime >= game_time:
+                            game_state = "wait_for_reaction"        
+
+# refreshes the page basicaly and make teh entire window black again
+    SCREEN.fill(pg.Color("BLACK"))
+    
+    #gets the center of the screen to "start":
+    center = SCREEN.get_rect().center
+    if game_state == "start":
+        SCREEN.blit(TEXT, TEXT.get_rect(center = center))
+    # waits for the next input of player
+    if game_state == "wait_for_reaction":
+        SCREEN.blit(TEXT, TEXT.get_rect(center = center))
+    # reaction of most previous attempt "score"
+    if reaction:
+        SCREEN.blit(reaction, reaction.get_rect(center = (center[0], 350)))
+    # average reaction of all attempts 
+    if avg_reaction:
+        SCREEN.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
+
          
 
     def show_start_screen(self):

@@ -5,7 +5,8 @@ HEIGHT = 600
 FPS = 60
 FONT_NAME = 'dejavuserif'
 HS_FILE = "fastestreaction.txt"
-
+SCREEN = pg.display.set_mode((640, 480))
+TEXT = FONT_NAME.render("PRESS ANY KEY TO START ", 0, (255,255,255))
 # define colors
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
