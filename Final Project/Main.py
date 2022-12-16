@@ -7,7 +7,7 @@
 #https://pygame.readthedocs.io/en/latest/1_intro/intro.html
 
 #Reaction time Game Main is my reaction time game reformated to fit the final projects standards and has a working highscore function.
-
+#this is a passion of mine because i realized that my teammates at swim practice had slow reaction times in general and this will help them by improving thier brains reactiontime and then it will translate to the pool when nessecary.
 
 #Import Librarys 
 from asyncio import _enter_task
