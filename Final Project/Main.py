@@ -130,12 +130,12 @@ def show_start_screen(self):
         self.draw_text("Your Average Reaction: " + str(avg_reaction), 22, WHITE, WIDTH / 2, 15)
         pg.display.flip()
 
-    def score(self):
+        def score(self):
 
-def show_go_screen(self):
+            def show_go_screen(self):
         # game over/continue
-        if not self.running:
-            return
+                if not self.running:
+                    return
         self.screen.fill(BLACK)
         #screen display
         self.draw_TEXT("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
