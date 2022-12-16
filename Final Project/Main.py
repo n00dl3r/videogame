@@ -10,6 +10,7 @@
 
 
 #Import Librarys 
+from asyncio import _enter_task
 import pygame as pg
 import random
 from settings import *
@@ -98,20 +99,20 @@ class Game:
 
 # refreshes the page basicaly and make teh entire window black again
     SCREEN.fill(pg.Color("BLACK"))
-    
+
     #gets the center of the screen to "start":
     center = SCREEN.get_rect().center
     if game_state == "start":
-        SCREEN.blit(TEXT, TEXT.get_rect(center = center))
+        SCREEN.blit(TEXT, TEXT.center(center = (_enter_task(0), 400)))
     # waits for the next input of player
     if game_state == "wait_for_reaction":
-        SCREEN.blit(TEXT, TEXT.get_rect(center = center))
+        SCREEN.blit(TEXT, TEXT.center(center = (_enter_task(0), 400)))
     # reaction of most previous attempt "score"
     if reaction:
-        SCREEN.blit(reaction, reaction.get_rect(center = (center[0], 350)))
+        SCREEN.blit(reaction, reaction(center = (_enter_task(0), 350)))
     # average reaction of all attempts 
     if avg_reaction:
-        SCREEN.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 400)))
+        SCREEN.blit(avg_reaction, avg_reaction(center = (_enter_task(0), 350)))
 
          
 
