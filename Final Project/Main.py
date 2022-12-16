@@ -27,12 +27,14 @@ game_time = 0
 averagereacttime = 0
 count = 0
 
+
+ # initialize game window, etc
+pg.init()
+pg.mixer.init()
+
 #Game class 
 class Game:
     def __init__(self):
-        # initialize game window, etc
-        pg.init()
-        pg.mixer.init()
         #Takes settings and imports them to the code with then 
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
@@ -61,28 +63,29 @@ class Game:
             except:
                 self.highscore = 0
 
-    def run(self):
         # Game Loop
         #real time is the game time so that we can diffrenciate the play time from avg reaction time
         #started loop and created a ticker to create ingame time
-        running = True
-        while running:
+running = True
+while running:
         #real time is the game time so that we can diffrenciate the play time from avg reaction time
             realtime = pg.time.get_ticks()
             #this closes the window when player closes it or alt+F4
+             # initialize game window, etc
+            pg.init()
             for event in pg.event.get():
                     if event.type == pg.QUIT:
                         running = False
             pg.quit()
     #this is where it will start the timer and start a wait timer that is within the random of 1000, 4000 
     # from the source of digital ocean
-        if event.type == pg.KEYDOWN:
-            if game_state == "start":
+if event.type == pg.KEYDOWN:
+        if game_state == "start":
                 game_state = "wait" 
                 game_time = realtime + random.randint(1000, 4000)
     #game starts and starts using equation to find the avg of first time used, all times used and prints it on the screen almost on top of eachother
     # from source of class notes and comments  
-            if game_state == "wait_for_reaction": 
+if game_state == "wait_for_reaction": 
                 game_state = "wait" 
                 reaction_time = (realtime - game_time) / 1000
                 game_time = realtime + random.randint(1000, 4000)
@@ -98,56 +101,55 @@ class Game:
                             game_state = "wait_for_reaction"        
 
 # refreshes the page basicaly and make teh entire window black again
-    SCREEN.fill(pg.Color("BLACK"))
+SCREEN.fill(pg.Color("BLACK"))
 
     #gets the center of the screen to "start":
-    center = SCREEN.get_rect().center
-    if game_state == "start":
-        SCREEN.blit(TEXT, TEXT.center(center = (_enter_task(0), 400)))
+center = SCREEN.get_rect().center
+if game_state == "start":
+        SCREEN.blit(TEXT, TEXT.center(center = center))
     # waits for the next input of player
-    if game_state == "wait_for_reaction":
-        SCREEN.blit(TEXT, TEXT.center(center = (_enter_task(0), 400)))
+if game_state == "wait_for_reaction":
+        SCREEN.blit(TEXT, TEXT.center(center = center))
     # reaction of most previous attempt "score"
-    if reaction:
-        SCREEN.blit(reaction, reaction(center = (_enter_task(0), 350)))
-    # average reaction of all attempts 
-    if avg_reaction:
-        SCREEN.blit(avg_reaction, avg_reaction(center = (_enter_task(0), 350)))
+if reaction:
+        SCREEN.blit(reaction, reaction.get_rect(center = (center[0], 350)))
+if avg_reaction:
+        SCREEN.blit(avg_reaction, avg_reaction.get_rect(center = (center[0], 350)))
 
          
 
-    def show_start_screen(self):
-        # game splash/start screen
-        realtime = pg.time.get_ticks()
-        game_time = realtime + random.randint(1000, 4000)
-        reaction_time = (realtime - game_time) / 1000
-        reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
-        avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {avg_reaction:.03f}",0,(255,255,255))
-        self.screen.fill(BGCOLOR)
-        self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
-        self.draw_text("Your Average Reaction: " + str(avg_reaction), 22, WHITE, WIDTH / 2, 15)
-        pg.display.flip()
+# def show_start_screen(self):
+#         # game splash/start screen
+#         realtime = pg.time.get_ticks()
+#         game_time = realtime + random.randint(1000, 4000)
+#         reaction_time = (realtime - game_time) / 1000
+#         reaction = FONT_NAME(f"REACTION TIME: {reaction_time:.03f}",0,(255,255,255))
+#         avg_reaction = FONT_NAME(f"AVERAGE REACTION TIME IS: {avg_reaction:.03f}",0,(255,255,255))
+#         self.screen.fill(BGCOLOR)
+#         self.draw_text(TITLE, 48, WHITE, WIDTH / 2, HEIGHT / 4)
+#         self.draw_text("Press a key to play", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+#         self.draw_text("Your Average Reaction: " + str(avg_reaction), 22, WHITE, WIDTH / 2, 15)
+#         pg.display.flip()
 
     # def score(self):
 
-    def show_go_screen(self):
-        # game over/continue
-        if not self.running:
-            return
-        self.screen.fill(BLACK)
-        #screen display
-        self.draw_text("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
-        self.draw_text("time: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
-        self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
-        if self.score > self.highscore:
-            self.highscore = self.score
-            self.draw_text("FASTEST TIME!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
-            with open(path.join(self.dir, HS_FILE), 'w') as f:
-                f.write(str(self.score))
-        #actualy calculates the fastest time
-        else:
-            self.draw_text("Fastest time: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
-        pg.display.flip()
-
+# def show_go_screen(self):
+#         # game over/continue
+#         if not self.running:
+#             return
+#         self.screen.fill(BLACK)
+#         #screen display
+#         self.draw_TEXT("GAME OVER", 48, WHITE, WIDTH / 2, HEIGHT / 4)
+#         self.draw_TEXT("time: " + str(self.score), 22, WHITE, WIDTH / 2, HEIGHT / 2)
+#         self.draw_text("Press a key to play again", 22, WHITE, WIDTH / 2, HEIGHT * 3 / 4)
+#         if self.score > self.highscore:
+#             self.highscore = self.score
+#             self.draw_text("FASTEST TIME!", 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+#             with open(path.join(self.dir, HS_FILE), 'w') as f:
+#                 f.write(str(self.score))
+#         #actualy calculates the fastest time
+#         else:
+#             self.draw_text("Fastest time: " + str(self.highscore), 22, WHITE, WIDTH / 2, HEIGHT / 2 + 40)
+#         pg.display.flip()
+# Game()
 pg.quit()
